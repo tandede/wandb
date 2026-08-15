@@ -212,7 +212,7 @@ func isStepItem(item stepKeyed) bool {
 func (t *HistoryStepTracker) explicitHistoryStepItem(
 	record *spb.HistoryRecord,
 ) (int64, bool) {
-	for _, item := range record.GetItem() {
+	for i, item := range record.GetItem() {
 		if !isStepItem(item) {
 			continue
 		}
@@ -223,6 +223,9 @@ func (t *HistoryStepTracker) explicitHistoryStepItem(
 				"sender: ignoring unparseable history _step value",
 				"value", item.GetValueJson(),
 			)
+			// Drop the bad item so auto-assignment does not append a second
+			// _step (which would make the uploaded value depend on item order).
+			record.Item = append(record.Item[:i], record.Item[i+1:]...)
 			return 0, false
 		}
 		return step, true
