@@ -1754,7 +1754,10 @@ type RunRecord struct {
 	// Whether this run is expected to resume an existing run when syncing.
 	//
 	// This is input intent, unlike `resumed`, which is a backend result.
-	ResumeMode    bool         `protobuf:"varint,24,opt,name=resume_mode,json=resumeMode,proto3" json:"resume_mode,omitempty"`
+	ResumeMode bool `protobuf:"varint,24,opt,name=resume_mode,json=resumeMode,proto3" json:"resume_mode,omitempty"`
+	// Whether this run was created in shared mode. Sync reads this so history
+	// uploads omit the step axis instead of inventing _step values.
+	SharedMode    bool         `protobuf:"varint,25,opt,name=shared_mode,json=sharedMode,proto3" json:"shared_mode,omitempty"`
 	XInfo         *XRecordInfo `protobuf:"bytes,200,opt,name=_info,json=Info,proto3" json:"_info,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
@@ -1947,6 +1950,13 @@ func (x *RunRecord) GetBranchPoint() *BranchPoint {
 func (x *RunRecord) GetResumeMode() bool {
 	if x != nil {
 		return x.ResumeMode
+	}
+	return false
+}
+
+func (x *RunRecord) GetSharedMode() bool {
+	if x != nil {
+		return x.SharedMode
 	}
 	return false
 }
@@ -11927,7 +11937,7 @@ const file_wandb_proto_wandb_internal_proto_rawDesc = "" +
 	"\vBranchPoint\x12\x10\n" +
 	"\x03run\x18\x01 \x01(\tR\x03run\x12\x14\n" +
 	"\x05value\x18\x02 \x01(\x01R\x05value\x12\x16\n" +
-	"\x06metric\x18\x03 \x01(\tR\x06metric\"\x82\a\n" +
+	"\x06metric\x18\x03 \x01(\tR\x06metric\"\xa3\a\n" +
 	"\tRunRecord\x12\x15\n" +
 	"\x06run_id\x18\x01 \x01(\tR\x05runId\x12\x16\n" +
 	"\x06entity\x18\x02 \x01(\tR\x06entity\x12\x18\n" +
@@ -11955,7 +11965,9 @@ const file_wandb_proto_wandb_internal_proto_rawDesc = "" +
 	"\x06forked\x18\x16 \x01(\bR\x06forked\x12>\n" +
 	"\fbranch_point\x18\x17 \x01(\v2\x1b.wandb_internal.BranchPointR\vbranchPoint\x12\x1f\n" +
 	"\vresume_mode\x18\x18 \x01(\bR\n" +
-	"resumeMode\x121\n" +
+	"resumeMode\x12\x1f\n" +
+	"\vshared_mode\x18\x19 \x01(\bR\n" +
+	"sharedMode\x121\n" +
 	"\x05_info\x18\xc8\x01 \x01(\v2\x1b.wandb_internal._RecordInfoR\x04Info\"C\n" +
 	"\rGitRepoRecord\x12\x1a\n" +
 	"\n" +

@@ -191,6 +191,10 @@ message RunRecord {
   // This is input intent, unlike `resumed`, which is a backend result.
   bool resume_mode = 24;
 
+  // Whether this run was created in shared mode. Sync reads this so history
+  // uploads omit the step axis instead of inventing _step values.
+  bool shared_mode = 25;
+
   _RecordInfo _info = 200;
 }
 
